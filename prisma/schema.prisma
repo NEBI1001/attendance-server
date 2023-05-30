@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["orderByNulls"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  firstName      String       @unique
+  lastName       String       @unique
+  email          String       @unique
+  password       String
+  role           UserRole
+  phoneNumber    String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  department     Department   @relation(fields: [departmentId], references: [id])
+  departmentId   Int
+  leaves         Leave[]      @relation("employeeLeave")
+  Attendance     Attendance[]
+  approvedLeaves Leave[]      @relation("approvedLeaves")
+
+  @@map("users")
+}
+
+model Leave {
+  id           Int       @id @default(autoincrement())
+  type         LeaveType
+  reason       String
+  startDate    DateTime
+  endDate      DateTime
+  employee     User      @relation("employeeLeave", fields: [employeeId], references: [id])
+  employeeId   Int
+  approvedBy   User?     @relation("approvedLeaves", fields: [approvedById], references: [id])
+  approvedById Int?
+  feedback     String?
+  approved     Boolean?
+  approveDate  DateTime?
+
+  @@unique([employeeId, startDate])
+  @@map("leave")
+}
+
+model Attendance {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @default(now())
+  employee   User     @relation(fields: [employeeId], references: [id])
+  employeeId Int
+}
+
+model Department {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  User User[]
+
+  @@map("departments")
+}
+
+enum LeaveType {
+  Sick
+  Emergency
+  Vacation
+  Other
+}
+
+enum UserRole {
+  Employee
+  Hr
+  Admin
+}

@@ -1,0 +1,13 @@
+Api Routes
+- /user - Lists all users in the database - DONE
+- /user/login - Login a user - DONE
+- /user/create - Creates a user (Role verification required - Admin only) - DONE
+- /user/:id/delete - Deletes a user (Role verification required - Admin only) - DONE
+- /user/:id/update - Update the user's information (Authentication Reqiured)  - DONE
+- /user/:id - Returns the user's information (Authentication Required) - DONE
+- /user/:id/attendance/take - Take attendance (Authentication Required) = DONE
+- /user/:id/attendance - Return Attendance for that record (Authenttcation required) - DONE
+- /user/:id/leave - Return all the leaves associated with a user (Authentication Required)
+- /user/:id/leave/create - Create a leave for a uer
+- /leave - See all leaves in the system (Role verification required - HR only)
+- /leave/:id/approve = Approve a leave (Role verification required - HR only)
